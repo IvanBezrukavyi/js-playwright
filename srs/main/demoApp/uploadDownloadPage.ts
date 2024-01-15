@@ -11,6 +11,8 @@ const MULTI_FILE_PATHS = process.env.MULTI_FILE_PATHS || [
     '/Users/ibez/Desktop/repos/ts-playwright/srs/resources/files/upload/Customer_Loyalty_History.csv'
 ]
 
+const DOWNLOAD_FILE_PATH = 'srs/resources/files/download/*.jpeg'
+
 export class UploadAndDownload extends TextBoxMenuItems {
     protected downloadButton: Locator
     protected uploadButton: Locator
@@ -97,5 +99,25 @@ export class UploadAndDownload extends TextBoxMenuItems {
     async getUploadedFilePath(): Promise<string> {
         const expFilePath = (await this.uploadedFilePath.textContent()) || ''
         return expFilePath
+    }
+
+    async removeDownloadedFile(fileName: string, downloadPath: string = DOWNLOAD_FILE_PATH) {
+        try {
+            const files = await fs.readdir(downloadPath)
+            const matchingFiles = files.filter((file) => file.includes(fileName))
+
+            for (const matchingFile of matchingFiles) {
+                const filePath = path.join(downloadPath, matchingFile)
+
+                logger.info(`Removing downloaded file: ${filePath}`)
+
+                await fs.unlink(filePath)
+
+                logger.info('File removed successfully')
+            }
+        } catch (error) {
+            logger.error(`Error during file removal: ${error.message}`)
+            throw error
+        }
     }
 }

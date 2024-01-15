@@ -15,3 +15,5 @@ logs/.*.json
 logs/*.log
 srs/resources/files/download/*.jpeg
 .VSCodeCounter/*/*
+.vscode
+.husky

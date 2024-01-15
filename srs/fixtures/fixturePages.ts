@@ -8,7 +8,8 @@ type MyFixtures = {
     navigationTextBoxPage: TextBoxMenuItems
     textBoxPageWithMouseActions: TextBoxPageWithMouseActions
     textBoxPageWithKeyboardShortcuts: TextBoxPageWithKeyboardShortcuts
-    navigationUploadDownloadPage: UploadAndDownload
+    navigationUploadDownloadPage: TextBoxMenuItems
+    uploadDownload: UploadAndDownload
 }
 export const test = base.extend<MyFixtures>({
     navigationTextBoxPage: async ({ page }, use) => {
@@ -28,6 +29,14 @@ export const test = base.extend<MyFixtures>({
     },
 
     navigationUploadDownloadPage: async ({ page }, use) => {
+        const navigationUploadDownloadPage = new TextBoxMenuItems(page)
+        await navigationUploadDownloadPage.goTo()
+        await navigationUploadDownloadPage.selectElementsMenu()
+        await navigationUploadDownloadPage.selectUploadAndDownloadMenu()
+        await use(navigationUploadDownloadPage)
+    },
+
+    uploadAndDownload: async ({ page }, use) => {
         await use(new UploadAndDownload(page))
     }
 })
